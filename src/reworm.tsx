@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import createContext from 'create-react-context'
-import { ulid } from 'ulid'
 import equal from 'fast-deep-equal'
 
 type PrevState<T> = (prevState: T) => T
@@ -66,8 +65,16 @@ export class Provider extends Component {
   }
 }
 
+function uuidv4(): string {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    // tslint:disable-next-line
+    const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  })
+}
+
 export function create<T = any>(initial: T = {} as T): State<T> {
-  const id = ulid()
+  const id = uuidv4()
   store.setInitial(id, initial)
 
   return {
